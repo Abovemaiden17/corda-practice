@@ -3,9 +3,6 @@ buildscript {
     file("$projectDir/./constants.properties").withInputStream { constants.load(it) }
 
     ext {
-
-        //corda_gradle_plugins_version = '4.0.45'
-
         corda_release_group = constants.getProperty("cordaReleaseGroup")
         corda_core_release_group =  constants.getProperty("cordaCoreReleaseGroup")
         corda_release_version = constants.getProperty("cordaVersion")
@@ -17,9 +14,14 @@ buildscript {
         log4j_version = constants.getProperty("log4jVersion")
         slf4j_version = constants.getProperty("slf4jVersion")
         corda_platform_version = constants.getProperty("platformVersion").toInteger()
-        //springboot
+        // springboot
         spring_boot_version = '2.0.2.RELEASE'
         spring_boot_gradle_plugin_version = '2.0.2.RELEASE'
+        // accounts
+        accounts_release_group = constants.getProperty("accounts_release_group")
+        accounts_release_version = constants.getProperty("accounts_release_version")
+        confidential_id_release_group = constants.getProperty("confidential_id_release_group")
+        confidential_id_release_version= constants.getProperty("confidential_id_release_version")
     }
 
     repositories {
@@ -27,6 +29,9 @@ buildscript {
         mavenCentral()
         jcenter()
         maven { url 'https://ci-artifactory.corda.r3cev.com/artifactory/corda-releases' }
+        // accounts
+        maven { url 'http://ci-artifactory.corda.r3cev.com/artifactory/corda-lib-dev' }
+        maven { url 'http://ci-artifactory.corda.r3cev.com/artifactory/corda-lib' }
     }
 
     dependencies {
@@ -89,6 +94,9 @@ dependencies {
     cordapp project(":workflows")
     cordapp project(":contracts")
 
+    // Accounts Dependencies
+    cordaCompile "$accounts_release_group:accounts-contracts:$accounts_release_version"
+
     cordaCompile "org.apache.logging.log4j:log4j-slf4j-impl:${log4j_version}"
     cordaCompile "org.apache.logging.log4j:log4j-web:${log4j_version}"
     cordaCompile "org.slf4j:jul-to-slf4j:$slf4j_version"
@@ -110,6 +118,10 @@ task deployNodes(type: net.corda.plugins.Cordform, dependsOn: ['jar']) {
         }
         cordapp project(':contracts')
         cordapp project(':workflows')
+        // accounts
+        cordapp "$confidential_id_release_group:ci-workflows:$confidential_id_release_version"
+        cordapp "$accounts_release_group:accounts-contracts:$accounts_release_version"
+        cordapp "$accounts_release_group:accounts-workflows:$accounts_release_version"
     }
     node {
         name "O=Notary,L=London,C=GB"
