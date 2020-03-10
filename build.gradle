@@ -95,7 +95,9 @@ dependencies {
     cordapp project(":contracts")
 
     // Accounts Dependencies
-    cordaCompile "$accounts_release_group:accounts-contracts:$accounts_release_version"
+    cordapp "$accounts_release_group:accounts-contracts:$accounts_release_version"
+    cordapp "$accounts_release_group:accounts-workflows:$accounts_release_version"
+    cordapp "$confidential_id_release_group:ci-workflows:$confidential_id_release_version"
 
     cordaCompile "org.apache.logging.log4j:log4j-slf4j-impl:${log4j_version}"
     cordaCompile "org.apache.logging.log4j:log4j-web:${log4j_version}"

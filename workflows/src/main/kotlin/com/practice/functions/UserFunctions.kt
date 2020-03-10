@@ -1,8 +1,10 @@
 package com.practice.functions
 
 import co.paralleluniverse.fibers.Suspendable
+import com.practice.states.UserState
 import com.practice.utils.*
 import net.corda.core.CordaException
+import net.corda.core.contracts.StateAndRef
 import net.corda.core.flows.CollectSignaturesFlow
 import net.corda.core.flows.FinalityFlow
 import net.corda.core.flows.FlowLogic
@@ -12,9 +14,8 @@ import net.corda.core.identity.Party
 import net.corda.core.transactions.SignedTransaction
 import net.corda.core.transactions.TransactionBuilder
 import net.corda.core.utilities.ProgressTracker
-import java.lang.Exception
 
-abstract class CordaFunctions : FlowLogic<SignedTransaction>() {
+abstract class UserFunctions : FlowLogic<StateAndRef<UserState>>() {
     // Progress Tracker
     override val progressTracker = ProgressTracker(
             CREATING, VERIFYING, SIGNING, NOTARIZING, FINALIZING

@@ -2,21 +2,24 @@ package com.practice.flows
 
 import com.practice.contracts.UserContract
 import com.practice.contracts.UserContract.Companion.USER_ID
-import com.practice.functions.CordaFunctions
+import com.practice.functions.UserFunctions
 import com.practice.states.UserState
+import net.corda.core.CordaException
 import net.corda.core.contracts.Command
+import net.corda.core.contracts.StateAndRef
 import net.corda.core.contracts.UniqueIdentifier
+import net.corda.core.flows.FlowLogic
 import net.corda.core.flows.StartableByRPC
-import net.corda.core.transactions.SignedTransaction
 import net.corda.core.transactions.TransactionBuilder
 
 @StartableByRPC
-class RegisterUserFlow (private val name: String): CordaFunctions()
+class RegisterUserFlow (private val name: String): UserFunctions()
 {
-    override fun call(): SignedTransaction {
+    override fun call(): StateAndRef<UserState> {
         val transaction = transaction()
-        val stx = verifyAndSign(transaction)
-        return recordTransactionWithoutCounterParty(stx)
+        val ptx = verifyAndSign(transaction)
+        val stx = recordTransactionWithoutCounterParty(ptx)
+        return stx.coreTransaction.outRefsOfType(UserState::class.java).single()
     }
 
     private fun userState(): UserState
