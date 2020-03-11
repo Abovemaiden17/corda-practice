@@ -1,38 +1,40 @@
-package com.practice.flows
+package com.practice.flows.user
 
 import com.practice.contracts.UserContract
 import com.practice.contracts.UserContract.Companion.USER_ID
-import com.practice.functions.UserFunctions
+import com.practice.flows.BaseFlow
 import com.practice.states.UserState
-import net.corda.core.CordaException
 import net.corda.core.contracts.Command
-import net.corda.core.contracts.StateAndRef
 import net.corda.core.contracts.UniqueIdentifier
-import net.corda.core.flows.FlowLogic
 import net.corda.core.flows.StartableByRPC
+import net.corda.core.transactions.SignedTransaction
 import net.corda.core.transactions.TransactionBuilder
 
 @StartableByRPC
-class RegisterUserFlow (private val name: String): UserFunctions()
+class RegisterUserFlow (private val name: String,
+                        private val passwordHash: String,
+                        private val passwordSalt: String): BaseFlow()
 {
-    override fun call(): StateAndRef<UserState> {
+    override fun call(): SignedTransaction {
         val transaction = transaction()
         val ptx = verifyAndSign(transaction)
-        val stx = recordTransactionWithoutCounterParty(ptx)
-        return stx.coreTransaction.outRefsOfType(UserState::class.java).single()
+        return recordTransactionWithoutCounterParty(ptx)
     }
 
-    private fun userState(): UserState
-    {
+    private fun userState(): UserState {
+
         return UserState(
                 name = name,
+                passwordHash = passwordHash,
+                passwordSalt = passwordSalt,
+                jwtToken = null,
                 linearId = UniqueIdentifier(),
                 participants = listOf(ourIdentity)
         )
     }
 
     private fun transaction(): TransactionBuilder {
-        val notary = notary()
+        val notary = utilityServices().getNotary()
         val userState = userState()
         val builder = TransactionBuilder(notary = notary)
 

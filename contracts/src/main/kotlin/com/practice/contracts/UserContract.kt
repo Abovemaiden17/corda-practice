@@ -17,5 +17,7 @@ class UserContract : Contract
 
     interface Commands : CommandData {
         class Register : TypeOnlyCommandData(), Commands
+        class Change : TypeOnlyCommandData(), Commands
+        class Login : TypeOnlyCommandData(), Commands
     }
 }

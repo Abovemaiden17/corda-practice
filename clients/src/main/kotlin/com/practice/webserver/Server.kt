@@ -11,7 +11,7 @@ import org.springframework.context.annotation.ComponentScan
  */
 @SpringBootApplication
 @ComponentScan("com.practice")
-private open class Starter
+open class Starter
 
 /**
  * Starts our Spring Boot application.

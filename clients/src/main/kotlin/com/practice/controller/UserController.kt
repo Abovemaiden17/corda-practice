@@ -2,8 +2,7 @@ package com.practice.controller
 
 import com.practice.common.response.ResponseModel
 import com.practice.model.RegisterUserModel
-import com.practice.services.UserService
-import com.practice.webserver.NodeRPCConnection
+import com.practice.services.interfaces.IUserService
 import javassist.NotFoundException
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -14,7 +13,7 @@ private const val CONTROLLER_NAME = "api/v1/users"
 @RestController
 @CrossOrigin(origins = ["*"])
 @RequestMapping(CONTROLLER_NAME) // The paths for HTTP requests are relative to this base path.
-class UserController(private val userService: UserService, private val rpc: NodeRPCConnection) : BaseController() {
+class UserController(private val userService: IUserService) : BaseController() {
     /**
      * Get all users
      */
@@ -83,4 +82,42 @@ class UserController(private val userService: UserService, private val rpc: Node
             ))
         }
     }
+
+//    @GetMapping(value = ["/jwt"], produces = ["application/json"])
+//    private fun jwtToken(): ResponseEntity<ResponseModel>
+//    {
+//        return try
+//        {
+//            ResponseEntity.ok(ResponseModel(
+//                    message = "Success",
+//                    statusCode = HttpStatus.OK.value(),
+//                    result = jwt
+//            ))
+//        } catch (e: Exception) {
+//            ResponseEntity.badRequest().body(ResponseModel(
+//                    message = "Failed",
+//                    statusCode = HttpStatus.BAD_REQUEST.value(),
+//                    result = e.localizedMessage.toString()
+//            ))
+//        }
+//    }
+
+//    @GetMapping(value = ["/parser/{jwt}"], produces = ["application/json"])
+//    private fun jwtParser(@PathVariable jwt: String): ResponseEntity<ResponseModel>
+//    {
+//        return try
+//        {
+//            ResponseEntity.ok(ResponseModel(
+//                    message = "Success",
+//                    statusCode = HttpStatus.OK.value(),
+//                    result = jwtParser.decodeJWT(jwt)
+//            ))
+//        } catch (e: Exception) {
+//            ResponseEntity.badRequest().body(ResponseModel(
+//                    message = "Failed",
+//                    statusCode = HttpStatus.BAD_REQUEST.value(),
+//                    result = e.localizedMessage.toString()
+//            ))
+//        }
+//    }
 }
