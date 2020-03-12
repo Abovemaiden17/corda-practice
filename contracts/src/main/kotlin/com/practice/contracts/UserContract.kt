@@ -1,8 +1,8 @@
 package com.practice.contracts
 
-import net.corda.core.contracts.CommandData
 import net.corda.core.contracts.Contract
 import net.corda.core.contracts.TypeOnlyCommandData
+import net.corda.core.contracts.requireSingleCommand
 import net.corda.core.transactions.LedgerTransaction
 
 class UserContract : Contract
@@ -12,12 +12,24 @@ class UserContract : Contract
     }
 
     override fun verify(tx: LedgerTransaction) {
+        val command = tx.commands.requireSingleCommand<Commands>()
 
+        when (command.value) {
+            is Commands.Register -> {
+                //TODO
+            }
+            is Commands.Change -> {
+                //TODO
+            }
+            is Commands.Login -> {
+                //TODO
+            }
+        }
     }
 
-    interface Commands : CommandData {
-        class Register : TypeOnlyCommandData(), Commands
-        class Change : TypeOnlyCommandData(), Commands
-        class Login : TypeOnlyCommandData(), Commands
+    sealed class Commands : TypeOnlyCommandData() {
+        class Register : Commands()
+        class Change : Commands()
+        class Login : Commands()
     }
 }

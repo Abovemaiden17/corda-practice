@@ -1,6 +1,7 @@
 package com.practice.services
 
 import com.practice.schemas.UserSchema
+import com.practice.schemas.UserSchemaV1
 import com.practice.states.UserState
 import net.corda.core.contracts.StateAndRef
 import net.corda.core.flows.FlowException
@@ -20,7 +21,7 @@ class UserServices (private val serviceHub: AppServiceHub): SingletonSerializeAs
         val uuid = stringToUUID(id)
         return builder {
             val query =
-                    UserSchema.PersistentUser::linearId.equal(uuid)
+                    UserSchemaV1.PersistentUser::linearId.equal(uuid)
             val criteria = QueryCriteria.VaultCustomQueryCriteria(query)
             serviceHub.vaultService.queryBy<UserState>(criteria = criteria).states
         }.firstOrNull() ?: throw FlowException("User state with $id not found")

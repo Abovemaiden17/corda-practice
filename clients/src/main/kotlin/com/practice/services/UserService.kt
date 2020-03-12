@@ -51,7 +51,8 @@ class UserService (private val rpc: NodeRPCConnection, private val func: Convert
                 passwordHash,
                 passwordSalt
         )
-        return userFlow.returnValue.get().state.data.linearId.toString()
+        return userFlow.returnValue.get().coreTransaction.outRefsOfType<UserState>().single().state.data.linearId.toString()
+
     }
 
 }

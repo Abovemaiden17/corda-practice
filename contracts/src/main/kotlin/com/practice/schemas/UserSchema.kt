@@ -1,6 +1,5 @@
 package com.practice.schemas
 
-import com.practice.states.UserState
 import net.corda.core.schemas.MappedSchema
 import net.corda.core.schemas.PersistentState
 import net.corda.core.serialization.CordaSerializable
@@ -9,11 +8,13 @@ import javax.persistence.Column
 import javax.persistence.Entity
 import javax.persistence.Table
 
+object UserSchema
+
 @CordaSerializable
-object UserSchema : MappedSchema(
-        schemaFamily = UserState::class.java,
+object UserSchemaV1 : MappedSchema(
+        schemaFamily = UserSchema::class.java,
         version = 1,
-        mappedTypes = listOf(UserState::class.java)) {
+        mappedTypes = listOf(PersistentUser::class.java)) {
     @Entity
     @Table(name = "user" , indexes = [])
 

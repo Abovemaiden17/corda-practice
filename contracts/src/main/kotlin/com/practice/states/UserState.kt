@@ -2,6 +2,7 @@ package com.practice.states
 
 import com.practice.contracts.UserContract
 import com.practice.schemas.UserSchema
+import com.practice.schemas.UserSchemaV1
 import net.corda.core.contracts.BelongsToContract
 import net.corda.core.contracts.LinearState
 import net.corda.core.contracts.UniqueIdentifier
@@ -23,13 +24,13 @@ data class UserState(val name: String,
             copy(passwordSalt = passwordSalt, passwordHash = passwordHash)
 
     override fun generateMappedObject(schema: MappedSchema): PersistentState = when (schema) {
-        is UserSchema -> UserSchema.PersistentUser(
+        is UserSchemaV1 -> UserSchemaV1.PersistentUser(
                 name = name,
                 linearId = linearId.id
         )
         else -> throw IllegalStateException("Cannot construct instance of ${this.javaClass} from Schema: $schema")
     }
 
-    override fun supportedSchemas() = listOf(UserSchema)
+    override fun supportedSchemas() = listOf(UserSchemaV1)
 }
 
