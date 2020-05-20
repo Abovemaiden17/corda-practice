@@ -8,6 +8,7 @@ tags
 *.log.gz
 *.orig
 *.txt
+.vscode/
 
 .gradle
 
