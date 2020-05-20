@@ -9,6 +9,10 @@ tags
 *.orig
 *.txt
 .vscode/
+bin/
+clients/bin/
+contracts/bin/
+workflows/bin/
 
 .gradle
 
